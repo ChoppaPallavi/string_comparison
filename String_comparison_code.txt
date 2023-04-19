@@ -1,0 +1,50 @@
+import string
+
+def compare_strings(count, comparison_type):
+    strings = []
+    for i in range(count):
+        valid_input = False
+        while not valid_input:
+            input_string = input(f"Enter string {i+1}: ")
+            if input_string.isalpha():
+                valid_input = True
+            else:
+                print("Invalid input. Only alphabetic characters are allowed. Please try again.")
+        strings.append(input_string.upper())
+    
+    counts = [[0]*26 for i in range(count)] # to store the count of each alphabet in each string
+    positions = [[] for i in range(count)] # to store the positions where the vowels (or consonants) occur in each string
+    vowels = "AEIOU"
+    consonants = "".join(set(string.ascii_uppercase) - set(vowels))
+    
+    if comparison_type == "Vowels":
+        letters = vowels
+    elif comparison_type == "Consonants":
+        letters = consonants
+    
+    for i in range(count):
+        for j, c in enumerate(strings[i]):
+            if c.isalpha(): # consider only alphabets
+                if c.upper() in letters:
+                    counts[i][ord(c.upper()) - ord('A')] += 1
+                    positions[i].append(j)
+    
+    print(f"String comparison based on {comparison_type}:")
+    for i in range(count):
+        num_letters = sum(counts[i])
+        print(f"String {i+1} has {num_letters} {comparison_type.lower()}. Positions: {positions[i]}")
+            
+if __name__ == '__main__':
+    count = int(input("Please enter how many strings that you want to comapre: "))#string length ranges from(2-5)
+    while count < 2 or count > 5:
+        choice = input("Sorry it's invalid. Do you want to enter another value (Y/N)? ")
+        if choice.upper() == 'Y':
+            count = int(input("Please enter the number of strings that you want to compare: "))#string length ranges from(2-5)
+        else:
+            exit() # graceful exit
+    
+    comparison_type = input("Do you want to compare the strings by \"Vowels\" or \"Consonants\"? ")
+    while comparison_type not in ["Vowels", "Consonants"]:
+        comparison_type = input("Sorry it's invalid . Please enter either \"Vowels\" or \"Consonants\": ")
+    
+    compare_strings(count, comparison_type)
